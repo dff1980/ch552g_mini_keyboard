@@ -1,4 +1,14 @@
 # USB Mini Keyboard with CH552G
+что-бы завелось
+Драйвер для Windows брал от сюда
+https://www.wch.cn/downloads/WCHISPTool_Setup_exe.html
+в AppData\Local\Arduino15\packages\CH55xDuino\hardware\mcs51\0.0.26\platform.txt
+исправил
+compiler.wrapper.path.windows={runtime.tools.MCS51Tools.path}/win/busybox" ash "{runtime.tools.MCS51Tools.path}/wrapper
+на
+compiler.wrapper.path.windows=C:\PROGRA~1\Git\bin\bash.exe" "{runtime.tools.MCS51Tools.path}/wrapper
+
+
 
 ## Introduction
 This project began with the purchase of a compact USB keyboard with three keys from AliExpress, seemingly without any specific purpose in mind. The original software required for this keyboard was provided as a .exe file, which I downloaded from a Google Drive repository. However, since I don't have access to a Windows PC to test it, I'm quite certain that most antivirus software would not approve of it.
