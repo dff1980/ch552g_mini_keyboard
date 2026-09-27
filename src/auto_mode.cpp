@@ -6,75 +6,64 @@
 
 static button_function_t button_auto_s = {BUTTON_NULL};
 static uint8_t auto_counter_s = 0;
+static unsigned long auto_next_ms_s = 0;
 
 void auto_set_cycle(button_function_t button_auto)
 {
   auto_counter_s = 0;
   button_auto_s = button_auto;
-  led_set_mode(LED_FIX);
-  led_set_color_hue(NEO_RED, NEO_YEL, NEO_YEL);
+  auto_next_ms_s = 0;
 }
 
-void auto_update()
+bool auto_is_running(void)
+{
+  return button_auto_s.type != BUTTON_NULL;
+}
+
+void auto_update(void)
 {
   if (button_auto_s.type == BUTTON_NULL)
   {
     return;
   }
+
   if (button_auto_s.type == BUTTON_AUTO_KEYBOARD)
   {
-    led_set_color_hue(NEO_GREEN, NEO_YEL, NEO_YEL);
     Keyboard_press(button_auto_s.function.sequence.sequence[auto_counter_s]);
     delay(button_auto_s.function.sequence.delay);
-
     Keyboard_releaseAll();
-    led_set_color_hue(NEO_GREEN, NEO_GREEN, NEO_YEL);
 
     auto_counter_s++;
+
     if (auto_counter_s >= button_auto_s.function.sequence.length)
     {
-      led_set_color_hue(NEO_GREEN, NEO_GREEN, NEO_GREEN);
       auto_counter_s = 0;
     }
+
+    return;
   }
+
   if (button_auto_s.type == BUTTON_AUTO_MOUSE)
   {
-    led_set_color_hue(NEO_GREEN, NEO_YEL, NEO_YEL);
-    switch (button_auto_s.function.mouse.mouse_event_sequence[auto_counter_s].type)
+    unsigned long now = millis();
+
+    if (now < auto_next_ms_s)
     {
-    case UP:
-      Mouse_move(0, -button_auto_s.function.mouse.mouse_event_sequence[auto_counter_s].value);
-      break;
-    case DOWN:
-      Mouse_move(0, button_auto_s.function.mouse.mouse_event_sequence[auto_counter_s].value);
-      break;
-    case LEFT:
-      Mouse_move(-button_auto_s.function.mouse.mouse_event_sequence[auto_counter_s].value, 0);
-      break;
-    case RIGH:
-      Mouse_move(button_auto_s.function.mouse.mouse_event_sequence[auto_counter_s].value, 0);
-      break;
-    case LEFT_CLICK:
-      Mouse_click(MOUSE_LEFT);
-      break;
-    case RIGHT_CLICK:
-      Mouse_click(MOUSE_RIGHT);
-      break;
-    case SCROLL_UP:
-      Mouse_scroll(button_auto_s.function.mouse.mouse_event_sequence[auto_counter_s].value);
-      break;
-    case SCROLL_DOWN:
-      Mouse_scroll(-button_auto_s.function.mouse.mouse_event_sequence[auto_counter_s].value);
-      break;
-    default:
-      break;
+      return;
     }
-    delay(button_auto_s.function.mouse.delay);
-    auto_counter_s++;
-    if (auto_counter_s >= button_auto_s.function.mouse.length)
+
+    int8_t x;
+    int8_t y;
+
+    do
     {
-      led_set_color_hue(NEO_GREEN, NEO_GREEN, NEO_GREEN);
-      auto_counter_s = 0;
+      x = (int8_t)random(-5, 6);
+      y = (int8_t)random(-5, 6);
     }
+    while (x == 0 && y == 0);
+
+    Mouse_move(x, y);
+
+    auto_next_ms_s = now + button_auto_s.function.mouse.delay;
   }
 }
