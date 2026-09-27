@@ -1,14 +1,27 @@
 #include <Arduino.h>
 #include "neo/neo.h"
 #include "led.h"
-
-// ===================================================================================
-// Color section
-// ============================================================================
+#include "auto_mode.h"
+#include "userUsbHidKeyboardMouse/USBHIDKeyboardMouse.h"
 
 static enum led_keyboard_mode_t led_mode_s = LED_LOOP;
-static int color_hue_s[3] = {0, 0, 0}; // hue value: 0..191 color map
-static int curretn_key_s = -1;         // current press key
+
+static uint8_t color_hue_s[3] =
+{
+  NEO_RED,
+  NEO_RED,
+  NEO_RED
+};
+
+static int current_key_s = -1;
+static bool layer_led_mode_s = false;
+
+static uint8_t breath_s = 0;
+static bool breath_down_s = false;
+static unsigned long breath_last_ms_s = 0;
+
+#define BREATH_STEP_MS 25
+#define BREATH_MAX 40
 
 void led_set_color_hue(uint8_t led0, uint8_t led1, uint8_t led2)
 {
@@ -20,40 +33,96 @@ void led_set_color_hue(uint8_t led0, uint8_t led1, uint8_t led2)
 void led_set_mode(enum led_keyboard_mode_t mode)
 {
   led_mode_s = mode;
-  switch (mode)
+  layer_led_mode_s = false;
+
+  if (mode == LED_LOOP)
   {
-  case LED_LOOP:
     color_hue_s[0] = NEO_RED;
     color_hue_s[1] = NEO_YEL;
     color_hue_s[2] = NEO_GREEN;
-    break;
   }
 }
 
-// if in loop mode, change color to pressed key
-void led_presskey(int key)
+void led_set_layer(uint8_t hue)
 {
-  curretn_key_s = key;
+  led_mode_s = LED_FIX;
+  layer_led_mode_s = true;
+
+  color_hue_s[0] = hue;
+  color_hue_s[1] = hue;
+  color_hue_s[2] = hue;
+
+  current_key_s = -1;
 }
 
-void led_update()
+void led_presskey(int key)
 {
-  if (led_mode_s == LED_LOOP)
+  current_key_s = key;
+}
+
+void led_update(void)
+{
+  bool status_breathing = false;
+
+  if (layer_led_mode_s)
   {
-    for (int i = 0; i < 3; i++)
+    if (color_hue_s[0] == NEO_RED)
     {
-      color_hue_s[i] += 1;
-      if (color_hue_s[i] > 191)
+      status_breathing = (SystemMicrophoneMute_is_muted() != 0);
+    }
+    else if (color_hue_s[0] == NEO_GREEN)
+    {
+      status_breathing = auto_is_running();
+    }
+  }
+
+  unsigned long now = millis();
+
+  if (status_breathing)
+  {
+    if ((now - breath_last_ms_s) >= BREATH_STEP_MS)
+    {
+      breath_last_ms_s = now;
+
+      if (!breath_down_s)
       {
-        color_hue_s[i] = 0;
+        if (breath_s < BREATH_MAX)
+        {
+          breath_s++;
+        }
+        else
+        {
+          breath_down_s = true;
+        }
+      }
+      else
+      {
+        if (breath_s > 0)
+        {
+          breath_s--;
+        }
+        else
+        {
+          breath_down_s = false;
+        }
       }
     }
   }
+  else
+  {
+    breath_s = 0;
+    breath_down_s = false;
+  }
+
   for (int led = 0; led < 3; led++)
   {
-    if (curretn_key_s == led)
+    if (current_key_s == led)
     {
       NEO_writeColor(led, 255, 255, 255);
+    }
+    else if (status_breathing && led == 0)
+    {
+      NEO_writeColor(led, 0, breath_s, 0);
     }
     else
     {
