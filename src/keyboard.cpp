@@ -217,7 +217,6 @@ void keyboard_press_button(keyboard_button_t button, keyboard_button_keyboard_mo
     break;
   case BUTTON_NULL:
     break;
-    break;
   default:
     break;
   }
