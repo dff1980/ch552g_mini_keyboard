@@ -235,6 +235,7 @@ uint8_t USB_EP1_send(__data uint8_t reportID) {
     }
 
     UEP1_T_LEN = 1 + sizeof(HIDSystemControl);
+   }
 
   UpPoint1_Busy = 1;
   UEP1_CTRL = UEP1_CTRL & ~MASK_UEP_T_RES |
