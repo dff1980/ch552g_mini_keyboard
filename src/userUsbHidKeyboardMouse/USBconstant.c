@@ -242,3 +242,49 @@ __code uint8_t ReportDescriptor[] = {
 
     0xC0
 };
+
+// String Descriptors
+__code uint8_t LanguageDescriptor[] = {
+    0x04, 0x03, 0x09, 0x04
+};
+
+__code uint16_t SerialDescriptor[] = {
+    (((13 + 1) * 2) | (DTYPE_String << 8)),
+    'C',
+    'H',
+    '5',
+    '5',
+    'x',
+    ' ',
+    'k',
+    'b',
+    'd',
+    ' ',
+    'm',
+    'o',
+    's',
+};
+
+__code uint16_t ProductDescriptor[] = {
+    (((10 + 1) * 2) | (DTYPE_String << 8)),
+    'C',
+    'H',
+    '5',
+    '5',
+    'x',
+    'd',
+    'u',
+    'i',
+    'n',
+    'o',
+};
+
+__code uint16_t ManufacturerDescriptor[] = {
+    (((6 + 1) * 2) | (DTYPE_String << 8)),
+    'D',
+    'e',
+    'q',
+    'i',
+    'n',
+    'g',
+};
