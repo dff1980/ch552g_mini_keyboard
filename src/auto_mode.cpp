@@ -7,6 +7,20 @@
 static button_function_t button_auto_s = {BUTTON_NULL};
 static uint8_t auto_counter_s = 0;
 static unsigned long auto_next_ms_s = 0;
+static uint8_t auto_random_state_s = 0xA7;
+
+static uint8_t auto_random8(void)
+{
+  uint8_t x = auto_random_state_s;
+
+  x ^= (uint8_t)(x << 3);
+  x ^= (uint8_t)(x >> 5);
+  x ^= (uint8_t)(x << 1);
+
+  auto_random_state_s = x;
+
+  return x;
+}
 
 void auto_set_cycle(button_function_t button_auto)
 {
@@ -55,12 +69,27 @@ void auto_update(void)
     int8_t x;
     int8_t y;
 
+    int8_t x;
+    int8_t y;
+    uint8_t r;
+    
     do
     {
-      x = (int8_t)(random(11) - 5);
-      y = (int8_t)(random(11) - 5);
+      r = auto_random8() & 0x0F;
     }
+    while (r > 10);
+    
+    x = (int8_t)r - 5;
+    do
+    {
+      r = auto_random8() & 0x0F;
+    }
+    while (r > 10);
+    
+    y = (int8_t)r - 5;
+    
     while (x == 0 && y == 0);
+
 
     Mouse_move(x, y);
 
