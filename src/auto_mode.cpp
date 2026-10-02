@@ -57,8 +57,8 @@ void auto_update(void)
 
     do
     {
-      x = (int8_t)random(-5, 6);
-      y = (int8_t)random(-5, 6);
+      x = (int8_t)(random(11) - 5);
+      y = (int8_t)(random(11) - 5);
     }
     while (x == 0 && y == 0);
 
