@@ -18,6 +18,7 @@ volatile __xdata uint8_t UpPoint1_Busy =
 
 __xdata uint8_t HIDKey[8] = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
 __xdata uint8_t HIDMouse[4] = {0x0, 0x0, 0x0, 0x0};
+__xdata uint8_t HIDConsumer[2] = {0x0, 0x0};
 
 #define SHIFT 0x80
 __code uint8_t _asciimap[128] = {
@@ -206,6 +207,16 @@ uint8_t USB_EP1_send(__data uint8_t reportID) {
       Ep1Buffer[64 + 1 + i] = ((uint8_t *)HIDMouse)[i];
     }
     UEP1_T_LEN = 1 + sizeof(HIDMouse); // data length
+  } else if (reportID == 3) {
+    Ep1Buffer[64 + 0] = 3;
+
+    for (__data uint8_t i = 0; i < sizeof(HIDConsumer); i++)
+    {
+      Ep1Buffer[64 + 1 + i] = HIDConsumer[i];
+    }
+
+    UEP1_T_LEN = 1 + sizeof(HIDConsumer);
+
   } else {
     UEP1_T_LEN = 0;
   }
@@ -346,7 +357,7 @@ uint8_t Mouse_press(__data uint8_t k) {
 }
 
 uint8_t Mouse_release(__data uint8_t k) {
-  memset(HIDMouse, 0, sizeof(HIDMouse));
+  
   HIDMouse[0] &= ~k;
   USB_EP1_send(2);
   return 1;
@@ -360,7 +371,7 @@ uint8_t Mouse_click(__data uint8_t k) {
 }
 
 uint8_t Mouse_move(__data int8_t x, __xdata int8_t y) {
-  memset(HIDMouse, 0, sizeof(HIDMouse));
+  
   HIDMouse[1] = x;
   HIDMouse[2] = y;
   USB_EP1_send(2);
@@ -368,7 +379,7 @@ uint8_t Mouse_move(__data int8_t x, __xdata int8_t y) {
 }
 
 uint8_t Mouse_scroll(__data int8_t tilt) {
-  memset(HIDMouse, 0, sizeof(HIDMouse));
+  
   HIDMouse[3] = tilt;
   USB_EP1_send(2);
   return 1;
