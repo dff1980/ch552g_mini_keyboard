@@ -6,40 +6,53 @@
 
 static button_function_t button_auto_s = {BUTTON_NULL};
 static uint8_t auto_counter_s = 0;
+static unsigned long auto_next_ms_s = 0;
+
 
 void auto_set_cycle(button_function_t button_auto)
 {
   auto_counter_s = 0;
   button_auto_s = button_auto;
-  led_set_mode(LED_FIX);
-  led_set_color_hue(NEO_RED, NEO_YEL, NEO_YEL);
+  auto_next_ms_s = 0;
 }
 
-void auto_update()
+bool auto_is_running(void)
+{
+  return button_auto_s.type != BUTTON_NULL;
+}
+
+void auto_update(void)
 {
   if (button_auto_s.type == BUTTON_NULL)
   {
     return;
   }
+
   if (button_auto_s.type == BUTTON_AUTO_KEYBOARD)
   {
-    led_set_color_hue(NEO_GREEN, NEO_YEL, NEO_YEL);
     Keyboard_press(button_auto_s.function.sequence.sequence[auto_counter_s]);
     delay(button_auto_s.function.sequence.delay);
-
     Keyboard_releaseAll();
-    led_set_color_hue(NEO_GREEN, NEO_GREEN, NEO_YEL);
 
     auto_counter_s++;
+
     if (auto_counter_s >= button_auto_s.function.sequence.length)
     {
-      led_set_color_hue(NEO_GREEN, NEO_GREEN, NEO_GREEN);
       auto_counter_s = 0;
     }
+
+    return;
   }
+
   if (button_auto_s.type == BUTTON_AUTO_MOUSE)
   {
-    led_set_color_hue(NEO_GREEN, NEO_YEL, NEO_YEL);
+    unsigned long now = millis();
+
+    if (now < auto_next_ms_s)
+    {
+      return;
+    }
+
     switch (button_auto_s.function.mouse.mouse_event_sequence[auto_counter_s].type)
     {
     case UP:
@@ -69,12 +82,12 @@ void auto_update()
     default:
       break;
     }
-    delay(button_auto_s.function.mouse.delay);
     auto_counter_s++;
     if (auto_counter_s >= button_auto_s.function.mouse.length)
     {
-      led_set_color_hue(NEO_GREEN, NEO_GREEN, NEO_GREEN);
       auto_counter_s = 0;
     }
+
+    auto_next_ms_s = now + button_auto_s.function.mouse.delay;
   }
 }
