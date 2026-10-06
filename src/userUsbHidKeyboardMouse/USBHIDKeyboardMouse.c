@@ -307,6 +307,37 @@ uint8_t Keyboard_getLEDStatus() {
   return Ep1Buffer[0]; // The only info we gets
 }
 
+uint8_t Consumer_press(uint16_t usage)
+{
+  HIDConsumer[0] = usage & 0xFF;
+  HIDConsumer[1] = (usage >> 8) & 0xFF;
+
+  USB_EP1_send(3);
+
+  return 1;
+}
+
+uint8_t Consumer_release(void)
+{
+  HIDConsumer[0] = 0;
+  HIDConsumer[1] = 0;
+
+  USB_EP1_send(3);
+
+  return 1;
+}
+
+uint8_t Consumer_write(uint16_t usage)
+{
+  uint8_t result = Consumer_press(usage);
+
+  delayMicroseconds(10000);
+
+  Consumer_release();
+
+  return result;
+}
+
 uint8_t Mouse_press(__data uint8_t k) {
   memset(HIDMouse, 0, sizeof(HIDMouse));
   HIDMouse[0] |= k;

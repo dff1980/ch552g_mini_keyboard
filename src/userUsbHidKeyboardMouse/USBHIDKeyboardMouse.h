@@ -56,6 +56,9 @@
 #define KEY_F23 0xFA
 #define KEY_F24 0xFB
 
+#define MEDIA_VOLUME_UP   0x00E9
+#define MEDIA_VOLUME_DOWN 0x00EA
+
 enum MOUSE_BUTTON {
   MOUSE_LEFT = 1,
   MOUSE_RIGHT = 2,
@@ -75,6 +78,11 @@ void Keyboard_releaseAll(void);
 uint8_t Keyboard_write(__data uint8_t c);
 
 uint8_t Keyboard_getLEDStatus();
+
+uint8_t Consumer_press(uint16_t usage);
+uint8_t Consumer_release(void);
+uint8_t Consumer_write(uint16_t usage);
+
 
 uint8_t Mouse_press(__data uint8_t k);
 uint8_t Mouse_release(__data uint8_t k);

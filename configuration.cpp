@@ -33,6 +33,22 @@ static void button_type_rke2_shell(keyboard_button_keyboard_mode_t mode)
     }
 }
 
+static void button_volume_up(keyboard_button_keyboard_mode_t mode)
+{
+    if (mode == BTM_CLICK)
+    {
+        Consumer_write(MEDIA_VOLUME_UP);
+    }
+}
+
+static void button_volume_down(keyboard_button_keyboard_mode_t mode)
+{
+    if (mode == BTM_CLICK)
+    {
+        Consumer_write(MEDIA_VOLUME_DOWN);
+    }
+}
+
 const keyboard_configuration_t configurations[NUM_CONFIGURATION] = {
     {
         .button =
