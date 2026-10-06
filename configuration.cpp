@@ -131,7 +131,7 @@ const keyboard_configuration_t configurations[NUM_CONFIGURATION] = {
 
                     },
                     .length = 4,
-                    .delay = 7000,
+                    .delay = 250,
                     .keypress = 0
                 }
             },
