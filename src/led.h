@@ -1,12 +1,13 @@
 #pragma once
+
 // Key colors (hue value: 0..191)
-#define NEO_RED 0    // red
-#define NEO_YEL 32   // yellow
-#define NEO_GREEN 64 // green
-#define NEO_CYAN 96  // cyan
-#define NEO_BLUE 128 // blue
-#define NEO_MAG 160  // magenta
-#define NEO_WHITE 191  // white
+#define NEO_RED 0
+#define NEO_YEL 32
+#define NEO_GREEN 64
+#define NEO_CYAN 96
+#define NEO_BLUE 128
+#define NEO_MAG 160
+#define NEO_WHITE 191
 #define NEO_BRIGHT_KEYS 2
 
 enum led_keyboard_mode_t
@@ -25,6 +26,8 @@ void led_set_color_hue(uint8_t led0, uint8_t led1, uint8_t led2);
 // update led task
 void led_update();
 
-//if in loop mode, change color to pressed key
+// if in loop mode, change color to pressed key
 void led_presskey(int key);
 
+// fixed color for current layer
+void led_set_layer(uint8_t hue);
