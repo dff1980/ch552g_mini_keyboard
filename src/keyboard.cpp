@@ -45,15 +45,27 @@ void keyboard_press_enc(keyboard_button_keyboard_mode_t mode)
 {
   if (mode == BTM_PRESS)
   {
-    auto_set_cycle(button_function_null);
     menu_mode_s = current_mode_s;
     current_mode_s = MENU_CONF;
     set_menu_led();
   }
+
   if (mode == BTM_RELEASE)
   {
     current_mode_s = menu_mode_s;
-    led_set_mode(LED_LOOP);
+
+    if (current_mode_s == 0)
+    {
+      led_set_layer(NEO_RED);
+    }
+    else if (current_mode_s == 1)
+    {
+      led_set_layer(NEO_GREEN);
+    }
+    else if (current_mode_s == 2)
+    {
+      led_set_layer(NEO_BLUE);
+    }
   }
 }
 
@@ -190,17 +202,20 @@ void keyboard_press_button(keyboard_button_t button, keyboard_button_keyboard_mo
   case BUTTON_AUTO_MOUSE:
     if (mode == BTM_PRESS)
     {
-      auto_set_cycle(configurations[current_mode_s].button[button]);
+      if (auto_is_running())
+      {
+        auto_set_cycle(button_function_null);
+      }
+      else
+      {
+        auto_set_cycle(configurations[current_mode_s].button[button]);
+      }
     }
     break;
   case BUTTON_FUNCTION:
     configurations[current_mode_s].button[button].function.functionPointer(mode);
     break;
   case BUTTON_NULL:
-    if (mode == BTM_PRESS)
-    {
-      auto_set_cycle(configurations[current_mode_s].button[button]);
-    }
     break;
   default:
     break;
@@ -209,5 +224,5 @@ void keyboard_press_button(keyboard_button_t button, keyboard_button_keyboard_mo
 
 void keyboard_setup()
 {
-
+  led_set_layer(NEO_RED);
 }
