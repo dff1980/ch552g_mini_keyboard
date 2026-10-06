@@ -151,7 +151,31 @@ __code uint8_t ReportDescriptor[] = {
     0x95, 0x03,       //     REPORT_COUNT (3)
     0x81, 0x06,       //     INPUT (Data,Var,Rel)
     0xc0,             //     END_COLLECTION
-    0xc0              // END_COLLECTION
+    0xc0,              // END_COLLECTION
+    // ============================================================
+    // Consumer Control - Report ID 3
+    // Volume Up / Volume Down
+    // ============================================================
+
+    0x05, 0x0C,       // USAGE_PAGE (Consumer)
+
+    0x09, 0x01,       // USAGE (Consumer Control)
+    0xA1, 0x01,       // COLLECTION (Application)
+
+    0x85, 0x03,       // REPORT_ID (3)
+
+    0x15, 0x00,
+    0x26, 0xFF, 0x03,
+
+    0x19, 0x00,
+    0x2A, 0xFF, 0x03,
+
+    0x75, 0x10,
+    0x95, 0x01,
+
+    0x81, 0x00,
+
+    0xC0
 };
 
 // String Descriptors

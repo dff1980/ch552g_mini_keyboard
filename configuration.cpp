@@ -9,8 +9,8 @@ static const char rke2_shell_text[] =
     "export KUBECONFIG=/etc/rancher/rke2/rke2.yaml; "
     "export CONTAINER_RUNTIME_ENDPOINT=unix:///run/k3s/containerd/containerd.sock; "
     "export IMAGE_SERVICE_ENDPOINT=unix:///run/k3s/containerd/containerd.sock; "
-    "bind '\"\\e[5~\": history-search-backward'; "
-    "bind '\"\\e[6~\": history-search-forward'; "
+    "bind '\"\\e[5\\~\": history-search-backward'; "
+    "bind '\"\\e[6\\~\": history-search-forward'; "
     "source <(kubectl completion bash); "
     "source <(crictl completion bash); "
     "source <(helm completion bash); "
@@ -26,7 +26,7 @@ static void button_type_rke2_shell(keyboard_button_keyboard_mode_t mode)
         return;
     }
 
-    for (uint8_t i = 0; rke2_shell_text[i] != 0; i++)
+    for (uint8_t i = 0; i < sizeof(rke2_shell_text) - 1; i++)
     {
         Keyboard_write((uint8_t)rke2_shell_text[i]);
         delay(TEXT_DELAY_MS);
