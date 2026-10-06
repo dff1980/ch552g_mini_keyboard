@@ -9,8 +9,8 @@ static const char rke2_shell_text[] =
     "export KUBECONFIG=/etc/rancher/rke2/rke2.yaml; "
     "export CONTAINER_RUNTIME_ENDPOINT=unix:///run/k3s/containerd/containerd.sock; "
     "export IMAGE_SERVICE_ENDPOINT=unix:///run/k3s/containerd/containerd.sock; "
-    "bind '\"\\e[5\\~\": history-search-backward'; "
-    "bind '\"\\e[6\\~\": history-search-forward'; "
+    "bind '\"\\033[5~\": history-search-backward'; "
+    "bind '\"\\033[6~\": history-search-forward'; "
     "source <(kubectl completion bash); "
     "source <(crictl completion bash); "
     "source <(helm completion bash); "
@@ -114,16 +114,24 @@ const keyboard_configuration_t configurations[NUM_CONFIGURATION] = {
                     .mouse_event_sequence = {
                         {
                             .type = UP,
-                            .value = 10
+                            .value = 3
                         },
                        {
+                            .type = RIGH,
+                            .value = 3
+                        },
+                        {
                             .type = DOWN,
-                            .value = 10
+                            .value = 3
+                        },
+                       {
+                            .type = LEFT,
+                            .value = 3
                         },
 
                     },
-                    .length = 2,
-                    .delay = 700,
+                    .length = 4,
+                    .delay = 7000,
                     .keypress = 0
                 }
             },
@@ -134,7 +142,7 @@ const keyboard_configuration_t configurations[NUM_CONFIGURATION] = {
                     .mouse_event_sequence = {
                         {
                             .type = SCROLL_UP,
-                            .value = 1
+                            .value = 2
                         }
                     },
                     .length = 1,
@@ -149,7 +157,7 @@ const keyboard_configuration_t configurations[NUM_CONFIGURATION] = {
                     .mouse_event_sequence = {
                         {
                             .type = SCROLL_DOWN,
-                            .value = 1
+                            .value = 2
                         }
                     },
                     .length = 1,
