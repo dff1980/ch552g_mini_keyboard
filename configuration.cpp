@@ -59,7 +59,7 @@ const keyboard_configuration_t configurations[NUM_CONFIGURATION] = {
                     .sequence = {
                         'm'
                     },
-                    .length = 3,
+                    .length = 1,
                     .delay = 0
                 }
            },
@@ -70,7 +70,7 @@ const keyboard_configuration_t configurations[NUM_CONFIGURATION] = {
                     .sequence = {
                         'k'
                     },
-                    .length = 3,
+                    .length = 1,
                     .delay = 0
                 }
             },
@@ -122,7 +122,7 @@ const keyboard_configuration_t configurations[NUM_CONFIGURATION] = {
                         },
 
                     },
-                    .length = 1,
+                    .length = 2,
                     .delay = 700,
                     .keypress = 0
                 }
