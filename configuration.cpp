@@ -100,15 +100,6 @@ const keyboard_configuration_t configurations[NUM_CONFIGURATION] = {
         .button =
         {
             [BTN_1] = {
-                .type = BUTTON_FUNCTION,
-                .function.functionPointer = button_type_rke2_shell,
-            },
-
-            [BTN_2] = {
-                .type = BUTTON_NULL,
-            },
-
-            [BTN_3] = {
                 .type = BUTTON_AUTO_MOUSE,
                 .function.mouse = {
                     .mouse_event_sequence = {
@@ -135,6 +126,15 @@ const keyboard_configuration_t configurations[NUM_CONFIGURATION] = {
                     .keypress = 0
                 }
             },
+            [BTN_2] = {
+                .type = BUTTON_FUNCTION,
+                .function.functionPointer = button_type_rke2_shell,
+            },
+
+            [BTN_3] = {
+                .type = BUTTON_NULL,
+            },
+
 
             [ENC_CW] = {
                 .type = BUTTON_MOUSE,
