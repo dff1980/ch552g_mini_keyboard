@@ -8,8 +8,12 @@ compiler.wrapper.path.windows={runtime.tools.MCS51Tools.path}/win/busybox" ash "
 на
 compiler.wrapper.path.windows=C:\PROGRA~1\Git\bin\bash.exe" "{runtime.tools.MCS51Tools.path}/wrapper
 
-
-
+```powershell
+winget install ArduinoSA.CLI
+winget install Git.Git
+winget install LLVM.LLVM
+winget install Cppcheck.Cppcheck
+```
 ## Introduction
 This project began with the purchase of a compact USB keyboard with three keys from AliExpress, seemingly without any specific purpose in mind. The original software required for this keyboard was provided as a .exe file, which I downloaded from a Google Drive repository. However, since I don't have access to a Windows PC to test it, I'm quite certain that most antivirus software would not approve of it.
 
