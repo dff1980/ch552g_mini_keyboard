@@ -66,11 +66,12 @@ void led_update(void)
 
   if (layer_led_mode_s)
   {
-    if (color_hue_s[0] == NEO_RED)
-    {
-      status_breathing = (SystemMicrophoneMute_is_muted() != 0);
-    }
-    else if (color_hue_s[0] == NEO_GREEN)
+    // if (color_hue_s[0] == NEO_RED)
+    // {
+    //   status_breathing = (SystemMicrophoneMute_is_muted() != 0);
+    // }
+    // else if (color_hue_s[0] == NEO_GREEN)
+    if (color_hue_s[0] == NEO_GREEN)
     {
       status_breathing = auto_is_running();
     }
