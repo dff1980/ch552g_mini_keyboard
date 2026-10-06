@@ -1,254 +1,117 @@
 #include "configuration.h"
 #include "src/userUsbHidKeyboardMouse/USBHIDKeyboardMouse.h"
+#include <Arduino.h>
+
+#define TEXT_DELAY_MS 20
+
+static const char rke2_shell_text[] =
+    "export PATH=\"$PATH:/var/lib/rancher/rke2/bin\"; "
+    "export KUBECONFIG=/etc/rancher/rke2/rke2.yaml; "
+    "export CONTAINER_RUNTIME_ENDPOINT=unix:///run/k3s/containerd/containerd.sock; "
+    "export IMAGE_SERVICE_ENDPOINT=unix:///run/k3s/containerd/containerd.sock; "
+    "bind '\"\\e[5~\": history-search-backward'; "
+    "bind '\"\\e[6~\": history-search-forward'; "
+    "source <(kubectl completion bash); "
+    "source <(crictl completion bash); "
+    "source <(helm completion bash); "
+    "source <(openstack complete); "
+    "complete -C tofu tofu; "
+    "alias k=kubectl; "
+    "complete -o default -F __start_kubectl k";
+
+static void button_type_rke2_shell(keyboard_button_keyboard_mode_t mode)
+{
+    if (mode != BTM_PRESS)
+    {
+        return;
+    }
+
+    for (uint8_t i = 0; rke2_shell_text[i] != 0; i++)
+    {
+        Keyboard_write((uint8_t)rke2_shell_text[i]);
+        delay(TEXT_DELAY_MS);
+    }
+}
 
 const keyboard_configuration_t configurations[NUM_CONFIGURATION] = {
     {
-        .button = { // Configuration copy paste keyboard
+        .button =
+        {
             [BTN_1] = {
                 .type = BUTTON_SEQUENCE,
                 .function.sequence = {
-                    .sequence = {KEY_LEFT_CTRL, 'c'}, // ctrl + c
-                    .length = 2,            // Lengh of sequence
-                    .delay = 0             // no delay
+                    .sequence = {
+                        'm'
+                    },
+                    .length = 3,
+                    .delay = 0
                 }
-            },
+           },
+
             [BTN_2] = {
                 .type = BUTTON_SEQUENCE,
                 .function.sequence = {
-                    .sequence = {KEY_LEFT_CTRL, 'v'}, // ctrl + v
-                    .length = 2,            // Lengh of sequence
-                    .delay = 0             // no delay
+                    .sequence = {
+                        'k'
+                    },
+                    .length = 3,
+                    .delay = 0
                 }
             },
+
             [BTN_3] = {
-                .type = BUTTON_SEQUENCE,
-                .function.sequence = {
-                    .sequence = {KEY_LEFT_CTRL, 'z'}, // ctrl + z
-                    .length = 2,            // Lengh of sequence
-                    .delay = 0             // no delay
-                }
+                .type = BUTTON_NULL,
             },
-            [ENC_CW] = { // scroll up
-                .type = BUTTON_MOUSE,
-                .function.mouse = {
-                    .mouse_event_sequence = {
-                        {
-                            .type = SCROLL_DOWN,
-                            .value = 2
-                        }
-                    },
-                    .length = 1,
-                    .delay = 0,
-                    .keypress = 0 // Valore della pressione del tasto del mouse
-                }
-            },
-            [ENC_CCW] = {   // scroll down
-                .type = BUTTON_MOUSE,
-                .function.mouse = {
-                    .mouse_event_sequence = {
-                        {
-                            .type = SCROLL_UP,
-                            .value = 2
-                        }
-                    },
-                    .length = 1,
-                    .delay = 0,
-                    .keypress = 0 // Valore della pressione del tasto del mouse
-                }
-            },
-            [BTN_ENC] = {
-                .type = BUTTON_FUNCTION,
-                .function.functionPointer = keyboard_press_enc,
-            },
-        }
-    },
-    {   // Configuration photoshop
-        .button = { // 
-            [BTN_1] = {
-                .type = BUTTON_SEQUENCE,
-                .function.sequence = {
-                    .sequence = {'e'}, // e
-                    .length = 1,            // Lengh of sequence
-                    .delay = 0             // no delay
-                }
-            },
-            [BTN_2] = {
-                .type = BUTTON_SEQUENCE,
-                .function.sequence = {
-                    .sequence = {'s'}, // s
-                    .length = 1,            // Lengh of sequence
-                    .delay = 0             // no delay
-                }
-            },
-            [BTN_3] = {
-                .type = BUTTON_MOUSE,
-                .function.mouse = {
-                    .mouse_event_sequence = {
-                        {
-                            .type = LEFT_CLICK,
-                            .value = 1
-                        }
-                    },
-                    .length = 1,
-                    .delay = 0,
-                    .keypress = KEY_LEFT_ALT // Valore della pressione del tasto del mouse
-                }
-            },
+
             [ENC_CW] = {
-                .type = BUTTON_MOUSE,
-                .function.mouse = {
-                    .mouse_event_sequence = {
-                        {
-                            .type = SCROLL_UP,
-                            .value = 1
-                        }
-                    },
-                    .length = 1,
-                    .delay = 0,
-                    .keypress = KEY_LEFT_ALT // Valore della pressione del tasto del mouse
-                }
+                .type = BUTTON_FUNCTION,
+                .function.functionPointer = button_volume_up,
             },
+
             [ENC_CCW] = {
-                .type = BUTTON_MOUSE,
-                .function.mouse = {
-                    .mouse_event_sequence = {
-                        {
-                            .type = SCROLL_DOWN,
-                            .value = 1
-                        }
-                    },
-                    .length = 1,
-                    .delay = 0,
-                    .keypress = KEY_LEFT_ALT // Valore della pressione del tasto del mouse
-                }
+                .type = BUTTON_FUNCTION,
+                .function.functionPointer = button_volume_down,
             },
+
             [BTN_ENC] = {
                 .type = BUTTON_FUNCTION,
                 .function.functionPointer = keyboard_press_enc,
             },
         }
     },
-    {   // Configuration game
-        .button = { // 
+
+    {
+        .button =
+        {
             [BTN_1] = {
-                .type = BUTTON_SEQUENCE,
-                .function.sequence = {
-                    .sequence = {'a','a','a','a'}, // multi a
-                    .length = 4,            // Lengh of sequence
-                    .delay = 50             // no delay
-                }
+                .type = BUTTON_FUNCTION,
+                .function.functionPointer = button_type_rke2_shell,
             },
+
             [BTN_2] = {
-                .type = BUTTON_SEQUENCE,
-                .function.sequence = {
-                    .sequence = {'b','b','b','b','b','b','b','b'}, // multi b
-                    .length = 8,            // Lengh of sequence
-                    .delay = 50             // no delay
-                }
+                .type = BUTTON_NULL,
             },
+
             [BTN_3] = {
-                .type = BUTTON_MOUSE,
-                .function.mouse = { //multi click
-                    .mouse_event_sequence = {
-                        {
-                            .type = LEFT_CLICK,
-                            .value = 1
-                        },
-                        {
-                            .type = LEFT_CLICK,
-                            .value = 1
-                        },
-                        {
-                            .type = LEFT_CLICK,
-                            .value = 1
-                        },
-                        {
-                            .type = LEFT_CLICK,
-                            .value = 1
-                        },
-                        {
-                            .type = LEFT_CLICK,
-                            .value = 1
-                        }
-                    },
-                    .length = 5,
-                    .delay = 0,
-                    .keypress = KEY_LEFT_ALT // Valore della pressione del tasto del mouse
-                }
-            },
-            [ENC_CW] = {
-                .type = BUTTON_MOUSE,
-                .function.mouse = {
-                    .mouse_event_sequence = {
-                        {
-                            .type = SCROLL_UP,
-                            .value = 1
-                        }
-                    },
-                    .length = 1,
-                    .delay = 0,
-                    .keypress = KEY_LEFT_ALT // Valore della pressione del tasto del mouse
-                }
-            },
-            [ENC_CCW] = {
-                .type = BUTTON_MOUSE,
-                .function.mouse = {
-                    .mouse_event_sequence = {
-                        {
-                            .type = SCROLL_DOWN,
-                            .value = 1
-                        }
-                    },
-                    .length = 1,
-                    .delay = 0,
-                    .keypress = KEY_LEFT_ALT // Valore della pressione del tasto del mouse
-                }
-            },
-            [BTN_ENC] = {
-                .type = BUTTON_FUNCTION,
-                .function.functionPointer = keyboard_press_enc,
-            },
-        }
-    },
-    {   // Automatic keyboard
-        .button = { // 
-            [BTN_1] = {
-                .type = BUTTON_AUTO_KEYBOARD,
-                .function.sequence = {
-                    .sequence = {'#', 'i', 'n', 'c', 'l', 'u', 'd', 'e', ' ', '<', 's', 't', 'd', 'i', 'o', '.', 'h', '>', '\n', '\n', 'i', 'n', 't', ' ', 'm', 'a', 'i', 'n', '(', ')', '\n', '{', '\n', ' ', ' ', ' ', 'p', 'r', 'i', 'n', 't', 'f', '(', '"', 'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '"', ')', ';', '\n', '\n', ' ', ' ', ' ', 'r', 'e', 't', 'u', 'r', 'n', ' ', '0', ';', '\n', '}', '\n'}, // multi a
-                    .length = 73,            // Lengh of sequence
-                    .delay = 50             // no delay
-                }
-            },
-            [BTN_2] = {
                 .type = BUTTON_AUTO_MOUSE,
-                .function.mouse = { //multi click
+                .function.mouse = {
                     .mouse_event_sequence = {
                         {
                             .type = UP,
-                            .value = 40
+                            .value = 10
                         },
-                        {
-                            .type = RIGH,
-                            .value = 40
-                        },
-                        {
+                       {
                             .type = DOWN,
-                            .value = 40
+                            .value = 10
                         },
-                        {
-                            .type = LEFT,
-                            .value = 40
-                        }
+
                     },
-                    .length = 4,
-                    .delay = 50,
-                    .keypress = 0 // Valore della pressione del tasto del mouse
+                    .length = 1,
+                    .delay = 700,
+                    .keypress = 0
                 }
             },
-            [BTN_3] = {
-                .type = BUTTON_NULL,
-            },
+
             [ENC_CW] = {
                 .type = BUTTON_MOUSE,
                 .function.mouse = {
@@ -260,9 +123,10 @@ const keyboard_configuration_t configurations[NUM_CONFIGURATION] = {
                     },
                     .length = 1,
                     .delay = 0,
-                    .keypress = 0 // Valore della pressione del tasto del mouse
+                    .keypress = 0
                 }
             },
+
             [ENC_CCW] = {
                 .type = BUTTON_MOUSE,
                 .function.mouse = {
@@ -274,34 +138,50 @@ const keyboard_configuration_t configurations[NUM_CONFIGURATION] = {
                     },
                     .length = 1,
                     .delay = 0,
-                    .keypress = 0 // Valore della pressione del tasto del mouse
+                    .keypress = 0
                 }
             },
+
             [BTN_ENC] = {
                 .type = BUTTON_FUNCTION,
                 .function.functionPointer = keyboard_press_enc,
             },
         }
     },
-    {   //Menu configuration
-        .button = { // Configurtion copy paste keyboard
-            [BTN_1] = {
-                .type = BUTTON_NULL,
+
+    {
+        .button =
+        {
+            [BTN_1] = { .type = BUTTON_NULL },
+            [BTN_2] = { .type = BUTTON_NULL },
+            [BTN_3] = { .type = BUTTON_NULL },
+            [ENC_CW] = { .type = BUTTON_NULL },
+            [ENC_CCW] = { .type = BUTTON_NULL },
+
+            [BTN_ENC] = {
+                .type = BUTTON_FUNCTION,
+                .function.functionPointer = keyboard_press_enc,
             },
-            [BTN_2] = {
-                .type = BUTTON_NULL,
-            },
-            [BTN_3] = {
-                .type = BUTTON_NULL,
-            },
+        }
+    },
+
+    {
+        .button =
+        {
+            [BTN_1] = { .type = BUTTON_NULL },
+            [BTN_2] = { .type = BUTTON_NULL },
+            [BTN_3] = { .type = BUTTON_NULL },
+
             [ENC_CW] = {
                 .type = BUTTON_FUNCTION,
                 .function.functionPointer = button_menu_up,
             },
+
             [ENC_CCW] = {
                 .type = BUTTON_FUNCTION,
                 .function.functionPointer = button_menu_down,
             },
+
             [BTN_ENC] = {
                 .type = BUTTON_FUNCTION,
                 .function.functionPointer = keyboard_press_enc,
