@@ -40,6 +40,7 @@ void setup()
   NEO_init();
   delay(10);
   NEO_clearAll();
+  NEO_update();
 
   // Go in bootloader more if connected with encoder button pressed
   if (!digitalRead(PIN_BTN_ENC))
@@ -54,7 +55,7 @@ void setup()
   buttons_setup(PIN_BTN_1, PIN_BTN_2, PIN_BTN_3, PIN_BTN_ENC);
   keyboard_setup();
   encoder_setup(ENCODER_A, ENCODER_B);
-  led_set_mode(LED_LOOP);
+  led_update();
   USBInit();
 }
 
