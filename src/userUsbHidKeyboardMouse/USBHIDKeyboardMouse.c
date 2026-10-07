@@ -374,12 +374,14 @@ uint8_t Mouse_move(__data int8_t x, __xdata int8_t y) {
   
   HIDMouse[1] = x;
   HIDMouse[2] = y;
+  HIDMouse[3] = 0;
   USB_EP1_send(2);
   return 1;
 }
 
 uint8_t Mouse_scroll(__data int8_t tilt) {
-  
+  HIDMouse[1] = 0;
+  HIDMouse[2] = 0;
   HIDMouse[3] = tilt;
   USB_EP1_send(2);
   return 1;
