@@ -191,6 +191,7 @@ void keyboard_press_button(keyboard_button_t button, keyboard_button_keyboard_mo
     keyboard_run_key_sequence(configurations[current_mode_s].button[button].function.sequence, mode);
     break;
   case BUTTON_MOUSE:
+    auto_set_cycle(button_function_null);
     keyboard_run_mouse_sequence(configurations[current_mode_s].button[button].function.mouse, mode);
     break;
   case BUTTON_AUTO_KEYBOARD:
