@@ -308,11 +308,23 @@ void Keyboard_releaseAll(void) {
 }
 
 uint8_t Keyboard_write(__data uint8_t c) {
-    __data uint8_t p = Keyboard_press(c); // Keydown
+    __data uint8_t p;
 
+    // For characters requiring Shift, send Shift first.
+    if (c < 128 && (_asciimap[c] & SHIFT)) {
+        Keyboard_press(0x81);   // KEY_LEFT_SHIFT
+        delayMicroseconds(20000); // Wait 20 ms
 
-    Keyboard_release(c); // Keyup
+        p = Keyboard_press(c);  // Then press the character
+        delayMicroseconds(20000); // Hold for 20 ms
 
+        Keyboard_release(c);    // Release character and Shift
+        return p;
+    }
+
+    // Ordinary characters: original behavior
+    p = Keyboard_press(c);
+    Keyboard_release(c);
     return p;
 }
 
