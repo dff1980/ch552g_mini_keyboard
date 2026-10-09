@@ -88,6 +88,6 @@ void auto_update(void)
       auto_counter_s = 0;
     }
 
-    auto_next_ms_s = now + button_auto_s.function.mouse.delay;
+    auto_next_ms_s = now + button_auto_s.function.mouse.delay*10;
   }
 }

@@ -308,10 +308,12 @@ void Keyboard_releaseAll(void) {
 }
 
 uint8_t Keyboard_write(__data uint8_t c) {
-  __data uint8_t p = Keyboard_press(c); // Keydown
-  Keyboard_release(c);                  // Keyup
-  return p; // just return the result of press() since release() almost always
-            // returns 1
+    __data uint8_t p = Keyboard_press(c); // Keydown
+
+
+    Keyboard_release(c); // Keyup
+
+    return p;
 }
 
 uint8_t Keyboard_getLEDStatus() {

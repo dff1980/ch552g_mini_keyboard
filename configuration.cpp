@@ -2,7 +2,7 @@
 #include "src/userUsbHidKeyboardMouse/USBHIDKeyboardMouse.h"
 #include <Arduino.h>
 
-#define TEXT_DELAY_MS 20
+#define TEXT_DELAY_MS 60
 
 static const char rke2_shell_text[] =
     "export PATH=\"$PATH:/var/lib/rancher/rke2/bin\"; "
@@ -56,10 +56,8 @@ const keyboard_configuration_t configurations[NUM_CONFIGURATION] = {
             [BTN_1] = {
                 .type = BUTTON_SEQUENCE,
                 .function.sequence = {
-                    .sequence = {
-                        'm'
-                    },
-                    .length = 1,
+                    .sequence = {KEY_LEFT_CTRL, KEY_LEFT_ALT, KEY_LEFT_SHIFT, KEY_F20},
+                    .length = 4,
                     .delay = 0
                 }
            },
