@@ -2,7 +2,7 @@
 #include "src/userUsbHidKeyboardMouse/USBHIDKeyboardMouse.h"
 #include <Arduino.h>
 
-#define TEXT_DELAY_MS 60
+#define TEXT_DELAY_MS 20
 
 static const char rke2_shell_text[] =
     "export PATH=\"$PATH:/var/lib/rancher/rke2/bin\"; "
