@@ -131,10 +131,28 @@ const keyboard_configuration_t configurations[NUM_CONFIGURATION] = {
                         {
                             .type = LEFT_CLICK
                         },
+                        {
+                            .type = UP,
+                            .value = 1
+                        },
+                       {
+                            .type = RIGH,
+                            .value = 1
+                        },
+                        {
+                            .type = DOWN,
+                            .value = 1
+                        },
+                       {
+                            .type = LEFT,
+                            .value = 1
+                        },
+
+
 
                     },
-                    .length = 1,
-                    .delay = 150000,
+                    .length = 5,
+                    .delay = 700,
                     .keypress = 0
                 }
             },
