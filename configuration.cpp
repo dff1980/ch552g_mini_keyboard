@@ -133,26 +133,42 @@ const keyboard_configuration_t configurations[NUM_CONFIGURATION] = {
                         },
                         {
                             .type = UP,
-                            .value = 1
+                            .value = 0
                         },
                        {
                             .type = RIGH,
-                            .value = 1
+                            .value = 0
                         },
                         {
                             .type = DOWN,
-                            .value = 1
+                            .value = 0
                         },
                        {
                             .type = LEFT,
-                            .value = 1
+                            .value = 0
+                        },
+
+                        {
+                            .type = UP,
+                            .value = 0
+                        },
+                       {
+                            .type = RIGH,
+                            .value = 0
+                        },
+                        {
+                            .type = DOWN,
+                            .value = 0
+                        },
+                       {
+                            .type = LEFT,
+                            .value = 0
                         },
 
 
-
                     },
-                    .length = 5,
-                    .delay = 700,
+                    .length = 9,
+                    .delay = 500,
                     .keypress = 0
                 }
             },
