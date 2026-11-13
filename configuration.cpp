@@ -125,8 +125,18 @@ const keyboard_configuration_t configurations[NUM_CONFIGURATION] = {
                 }
             },
             [BTN_2] = {
-                .type = BUTTON_FUNCTION,
-                .function.functionPointer = button_type_rke2_shell,
+                .type = BUTTON_AUTO_MOUSE,
+                .function.mouse = {
+                    .mouse_event_sequence = {
+                        {
+                            .type = LEFT_CLICK
+                        },
+
+                    },
+                    .length = 1,
+                    .delay = 15000,
+                    .keypress = 0
+                }
             },
 
             [BTN_3] = {
@@ -174,7 +184,10 @@ const keyboard_configuration_t configurations[NUM_CONFIGURATION] = {
     {
         .button =
         {
-            [BTN_1] = { .type = BUTTON_NULL },
+            [BTN_1] = {
+                .type = BUTTON_FUNCTION,
+                .function.functionPointer = button_type_rke2_shell,
+            },
             [BTN_2] = { .type = BUTTON_NULL },
             [BTN_3] = { .type = BUTTON_NULL },
             [ENC_CW] = { .type = BUTTON_NULL },
